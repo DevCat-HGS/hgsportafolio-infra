@@ -72,7 +72,7 @@ Va en `public/.well-known/` del sitio, así Netlify lo sirve tal cual con `Conte
 curl -s https://hgsportafolio.site/.well-known/security.txt
 ```
 
-El archivo de la raíz dice que cubre también el subdominio del panel. Pero ese subdominio no lo sirve: por la regla de una sola página (`/*` → `/index.html`), `https://admin.hgsportafolio.site/.well-known/security.txt` responde 200 con el HTML de la aplicación. `docs.` y `health.` responden 404. Mejora sugerida: en cada subdominio, un `security.txt` propio o una redirección 301 a la canónica, puesta **antes** de la regla `/*` en el caso del panel.
+El panel tiene **su propio** `security.txt`, en `admin/public/.well-known/` (desde el 2026-10-22). Hace falta porque cada archivo solo cubre su propio origen, y porque sin un archivo real la regla de una sola página (`/*` → `/index.html`) respondería esa ruta con el HTML de la aplicación. Netlify sirve primero los archivos que existen y solo después aplica una reescritura sin `force`, así que basta con poner el archivo en `public/`. Una prueba del repositorio exige que el contacto y el vencimiento de los dos coincidan; solo cambia la línea `Canonical`. `docs.` y `health.`, en GitHub Pages, responden 404: es una mejora pendiente.
 
 ```bash
 for h in admin docs health; do
